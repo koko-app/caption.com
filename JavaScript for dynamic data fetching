@@ -1,0 +1,45 @@
+const oklinkApiKey = 'f52d4f06-2342-4b3b-ad81-a652269cc34a';
+
+async function fetchTokenData(tokenAddress) {
+    try {
+        const response = await fetch(`https://www.oklink.com/api/explorer/v1/polygon/token/${tokenAddress}?apikey=${oklinkApiKey}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching token data:', error);
+    }
+}
+
+async function updateTokenInfo() {
+    const maticData = await fetchTokenData('0x299cd046bfed4003544040fdc20776a73055f743');
+    const wsnsData = await fetchTokenData('0x25a2db8659707766b3452ab38bCeA593C7E6B559');
+    
+    if (maticData) {
+        document.getElementById('matic-token').innerHTML = `
+            <img src="https://images.dodoex.io/y442k6ewEz27WKO5dkztpmiA1AdsvlH66JL_YqqC848/rs:fit:0/g:no/aHR0cHM6Ly9zdG9yYWdlLmdvb2lsZWFwaXMuY29tL2RvZG8tbWVkaWEtc3RhZ2luZy91cGxvYWRfaW1nXzEyNTQ4MzRfMjAyNDA4MTAyMDAyMzEzMTkuanBlZw.webp" alt="MATIC Token">
+            <h2>MATIC</h2>
+            <p>Price: $${maticData.price} (${maticData.priceInPol} POL)</p>
+            <p>Circulating Supply: ${maticData.circulatingSupply}</p>
+            <p>Market Cap: ${maticData.marketCap}</p>
+            <p>Total Value Locked: ${maticData.totalValueLocked}</p>
+            <p>Holders: ${maticData.holders}</p>
+            <p><a href="https://www.oklink.com/polygon/token/0x299Cd046bfeD4003544040fDc20776A73055f743" target="_blank">View on Explorer</a></p>
+        `;
+    }
+
+    if (wsnsData) {
+        document.getElementById('wsns-token').innerHTML = `
+            <img src="https://images.dodoex.io/rTKN9HcK_hoorqLGyaEQr2Zaw_Wu-hPL-xtD_4wBupE/rs:fit:0/g:no/aHR0cHM6Ly9zdG9yYWdlLmdvb2lsZWFwaXMuY29tL2RvZG8tbWVkaWEtc3RhZ2luZy91cGxvYWRfaW1nXzc3ODkzOTBfMjAyNDA4MTAxOTI5MDQ4NzQuanBlZw.webp" alt="wSNS Token">
+            <h2>wSNS</h2>
+            <p>Price: $${wsnsData.price} (${wsnsData.priceInPol} POL)</p>
+            <p>Circulating Supply: ${wsnsData.circulatingSupply}</p>
+            <p>Market Cap: ${wsnsData.marketCap}</p>
+            <p>Total Value Locked: ${wsnsData.totalValueLocked}</p>
+            <p>Holders: ${wsnsData.holders}</p>
+            <p><a href="https://www.oklink.com/polygon/token/0x25a2db8659707766b3452ab38bCeA593C7E6B559" target="_blank">View on Explorer</a></p>
+        `;
+    }
+}
+
+// Call the function to update the token info
+updateTokenInfo();
